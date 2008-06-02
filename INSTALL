@@ -1,0 +1,17 @@
+INSTALLING VERILOG MANGLER
+==========================
+
+You could just use the executable python script vmangle.py from this
+directory, but to do a system-wide installation, do this:
+
+./configure
+make install
+
+You need to do the "make install" part as root. After that, you can
+run the program using "vmangle".
+
+Check the README or do "vmangle --help" for usage information.
+
+Peter Scott
+pjscott@iastate.edu
+2 June 2008
