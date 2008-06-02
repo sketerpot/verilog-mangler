@@ -1,0 +1,34 @@
+VERILOG MANGLER 0.1
+===================
+
+usage: vmangle [input-file] [output-file]
+
+Puts a prefix in front of all Verilog module names, to prevent Quartus
+from complaining about conflicts with its built-in library.
+
+While this program will do the job faster and more safely than going
+through and manually using the find/replace feature in Quartus for
+every error, it's not perfect. It doesn't properly parse the Verilog
+syntax, and the heuristics it uses are not perfect. However, it should
+work for Balsa output.
+
+
+Example:
+--------
+
+Suppose you have a file homework.balsa and you generate the Verilog
+output homework.v from it. When you compile homework.v in Quartus, it
+complains about modules with names like INV. You can run this command:
+
+vmangle homework.v Balsa_homework.v
+
+This will produce the file Balsa_homework.v with module names changed
+from something like INV to something like __INV, which doesn't
+conflict with Quartus. It will rename all modules this way, so you
+should probably rename the top-level module to Balsa_homework. Then
+try compiling that in Quartus, and it should work better.
+
+
+Peter Scott
+pjscott@iastate.edu
+2 June 2008
