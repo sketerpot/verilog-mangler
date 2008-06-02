@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Very simple configure script: just checks for python.
+
+if [ "`which python`" = "" ]; then
+    echo "Python not found! Get it from http://www.python.org/"
+else
+    echo "Use 'make install' to install"
+fi
