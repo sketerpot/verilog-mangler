@@ -1,4 +1,4 @@
-VERILOG MANGLER 0.1
+VERILOG MANGLER 0.2
 ===================
 
 usage: vmangle [input-file] [output-file]

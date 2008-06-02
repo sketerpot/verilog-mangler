@@ -36,7 +36,9 @@ def show_usage():
 Puts a prefix in front of all module names, to prevent Quartus from
 complaining about conflicts with its built-in library. Warning: uses
 global search-and-replace and does not properly parse the Verilog
-code! Use at your own risk.'''%sys.argv[0])
+code! Use at your own risk.
+
+For more information, consult the vmangle(1) man page.'''%sys.argv[0])
 
 if __name__ == '__main__':
     if '--help' in sys.argv: show_usage()

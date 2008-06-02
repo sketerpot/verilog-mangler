@@ -1,0 +1,25 @@
+.TH VMANGLE "1" "June 2008" "Balsa utilities" "User Commands"
+.SH NAME
+vmangle \- put a prefix in front of Verilog module names
+.SH SYNOPSIS
+.B vmangle
+\fIinput-file\fR [\fIoutput-file\fR]
+.SH DESCRIPTION
+Puts a prefix in front of all Verilog module names, to prevent Quartus
+from complaining about conflicts with its built-in library.
+.PP
+If either the \fIinput-file\fR or the \fIoutput-file\fR argument is
+`\-', then standard input or standard output will be used. If
+\fIoutput-file\fR is not specified, it defaults to stdout.
+.SH OPTIONS
+.TP
+.B \-h, \-\-help
+Print usage information and quit
+.SH BUGS
+While this program will do the job faster and more safely than going
+through and manually using the find/replace feature in Quartus for
+every error, it's not perfect. It doesn't properly parse the Verilog
+syntax, and the heuristics it uses are not perfect. However, it should
+work for Balsa output.
+.SH AUTHOR
+Written by Peter Scott, <pjscott@iastate.edu>.
