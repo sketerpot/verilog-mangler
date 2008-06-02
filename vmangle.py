@@ -30,22 +30,25 @@ def openOrStd(filename, mode='r'):
         f = open(filename, mode)
     return f
 
+def show_usage():
+    sys.exit('''usage: %s [input-file] [output-file]
+
+Puts a prefix in front of all module names, to prevent Quartus from
+complaining about conflicts with its built-in library. Warning: uses
+global search-and-replace and does not properly parse the Verilog
+code! Use at your own risk.'''%sys.argv[0])
+
 if __name__ == '__main__':
-    if   len(sys.argv) == 1:
-        infile = sys.stdin
-        outfile = sys.stdout
+    if '--help' in sys.argv: show_usage()
+    if '-h' in sys.argv: show_usage()
+    if   len(sys.argv) == 1: show_usage()
     elif len(sys.argv) == 2:
         infile = openOrStd(sys.argv[1])
         outfile = sys.stdout
     elif len(sys.argv) == 3:
         infile = openOrStd(sys.argv[1])
         outfile = openOrStd(sys.argv[2], 'w')
-    else: sys.exit('''usage: %s [input-file] [output-file]
-
-Puts a prefix in front of all module names, to prevent Quartus
-from complaining about conflicts with its built-in
-library. Warning: uses global search-and-replace and does not
-properly parse the Verilog code! Use at your own risk.'''%sys.argv[0])
+    else: show_usage()
 
     text = infile.read()
     infile.close()
