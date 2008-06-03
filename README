@@ -3,8 +3,8 @@ VERILOG MANGLER 0.2
 
 usage: vmangle [input-file] [output-file]
 
-Puts a prefix in front of all Verilog module names, to prevent Quartus
-from complaining about conflicts with its built-in library.
+Puts a prefix in front of certain Verilog module names, to prevent
+Quartus from complaining about conflicts with its built-in library.
 
 While this program will do the job faster and more safely than going
 through and manually using the find/replace feature in Quartus for
@@ -22,13 +22,15 @@ complains about modules with names like INV. You can run this command:
 
 vmangle homework.v Balsa_homework.v
 
-This will produce the file Balsa_homework.v with module names changed
-from something like INV to something like __INV, which doesn't
-conflict with Quartus. It will rename all modules this way, so you
-should probably rename the top-level module to Balsa_homework. Then
-try compiling that in Quartus, and it should work better.
+This will produce the file Balsa_homework.v with offending module
+names changed from something like INV to something like QII_INV, which
+doesn't conflict with Quartus. In Quartus, compile this using the
+library file QII-example-cells.v (included in this directory) and,
+assuming that homework.v was generated using the "example" technology
+that came with Balsa, Quartus should simulate Balsa_homework.v without
+complaining about module name conflicts.
 
 
 Peter Scott
 pjscott@iastate.edu
-2 June 2008
+3 June 2008
