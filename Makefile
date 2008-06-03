@@ -5,10 +5,10 @@ clean:
 	rm -f *~
 
 dist:
-	mkdir vmangle-0.2
-	cp configure INSTALL Makefile vmangle.py README vmangle.1 vmangle-0.2/
-	tar -zcf vmangle-0.2.tar.gz vmangle-0.2/
-	rm -R vmangle-0.2/
+	mkdir vmangle-0.3
+	cp configure INSTALL Makefile vmangle.py README vmangle.1 extract_module_names.py add_qii_prefix.py QII-example-cells.v vmangle-0.3/
+	tar -zcf vmangle-0.3.tar.gz vmangle-0.3/
+	rm -R vmangle-0.3/
 
 install:
 	install -c 'vmangle.py' '/usr/local/bin/vmangle'

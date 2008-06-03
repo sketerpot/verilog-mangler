@@ -2,22 +2,16 @@
 import re
 import os, sys
 
-# Matches Verilog module and primitive declarations, returning one
-# group: the module's identifier. This is broken on escaped
-# identifiers, but otherwise it follows the language spec. More or
-# less. It's still dirty as hell.
-module_name_regexp = re.compile(r'\s(module|primitive|macromodule)\s+([a-zA-Z_][a-zA-Z_$0-9]*)', re.MULTILINE)
-
-def getModuleNames(string):
-    '''Return a list of all module and primitive names in string,
-    which is assumed to be the text of a Verilog file.'''
-    return [m[1] for m in module_name_regexp.findall(string)]
+# These symbols need to be changed.
+forbiddenNamesCheng = ['BUFF', 'NOR2', 'OR2', 'AND2']
+forbiddenNamesExample = ['AND2', 'AND3', 'AND4', 'OR2', 'OR3', 'OR4', 'NAND2', 'NAND3', 'NAND4', 'NOR2', 'NOR3', 'NOR4', 'XOR2', 'XNOR2',
+                         'MUTEX', 'BUF', 'BUFF', 'INV', 'LATCH', 'MUX2', 'NMUX2', 'DEMUX2', 'NKEEP', 'TRIBUF', 'TRIINV', 'C2', 'C3',
+                         'NC2P', 'C2N', 'VDD', 'GND', 'UDP_NKEEP', 'UDP_demux2_top_half', 'UDP_demux2_bottom_half', 'UDP_MUX2',
+                         'UDP_NMUX2', 'UDP_C2', 'UDP_C3', 'UDP_NC2P', 'UDP_C2N', 'UDP_mutex_top_half', 'UDP_mutex_bottom_half', 'UDP_LATCH']
 
 def mangleName(identifier):
-    '''Take a Verilog identifier and return a mangled version that is
-    guaranteed not to conflict with the Quartus built-in
-    library. Probably. Just adds a couple underscores, really.'''
-    return '__%s'%identifier
+    '''Take a Verilog identifier and add a QII_ prefix'''
+    return 'QII_%s'%identifier
 
 def openOrStd(filename, mode='r'):
     '''Like open(), but defaults to stdin or stdout if filename is -,
@@ -31,16 +25,24 @@ def openOrStd(filename, mode='r'):
     return f
 
 def show_usage():
-    sys.exit('''usage: %s [input-file] [output-file]
+    sys.exit('''usage: %s [-c] [input-file] [output-file]
 
-Puts a prefix in front of all module names, to prevent Quartus from
-complaining about conflicts with its built-in library. Warning: uses
-global search-and-replace and does not properly parse the Verilog
-code! Use at your own risk.
+Puts a QII_ prefix in front of all module names that conflict with the
+Quartus built-in library, and possibly some that do not. This should
+be compatible with Dr. Cheng\'s modified library file, but by default
+it aims for compatibility with my modified version of the
+example-cells.v library, QII-example-cells.v
+
+The -c option will limit the replacements to those necessary to work
+with Balsa_QII_LIB.v; otherwise, it will aim for completeness.
 
 For more information, consult the vmangle(1) man page.'''%sys.argv[0])
 
 if __name__ == '__main__':
+    if '-c' in sys.argv:
+        forbiddenNames = forbiddenNamesCheng
+        sys.argv.remove('-c')
+    else: forbiddenNames = forbiddenNamesExample
     if '--help' in sys.argv: show_usage()
     if '-h' in sys.argv: show_usage()
     if   len(sys.argv) == 1: show_usage()
@@ -54,9 +56,8 @@ if __name__ == '__main__':
 
     text = infile.read()
     infile.close()
-    modules = getModuleNames(text)
-
-    for modname in modules:
+    
+    for modname in forbiddenNames:
         mangled = mangleName(modname)
         text = re.sub(r'([\s;,()])%s([^a-zA-Z_$0-9])'%modname, r'\1%s\2'%mangled, text)
 
